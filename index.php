@@ -26,21 +26,25 @@ $count = mysqli_num_rows($result); //msqli_num_row คือการนับ�
 <?php if($count>0){?>
 
     <form action="deleteTextField.php" class="form-group" method="POST">
-    <label for="">รหัสพนักงาน</label>
+    <label>รหัสพนักงาน</label>
     <input type="text" placeholder="ใส่รหัสพนักงานเพื่อลบ" class="form-control" name="idemployee">
     <input type="submit" value="ลบข้อมูล" class="btn btn-danger mt-3">
     </form>
 
     <table class="table table-hover table-bordered">
-        <thead>  <!-- แบ่งเฉยๆว่าคือส่วนหัว-->
+        <thead class="text-center">  <!-- แบ่งเฉยๆว่าคือส่วนหัว-->
             <tr> <!-- tr คือแถวที่ 1 th คอลัมแต่เป็นตัวหน้าหรือก็คือหัวข้อของตาราง-->
                 <th>รหัสพนักงาน</th>
                 <th>ชื่อ</th>
                 <th>นามสกุล</th>
                 <th>นามสกุล</th>
                 <th>ทักษะ</th>
+                <th>แก้ไขข้อมูล</th>
                 <th>ลบข้อมูล</th>
-                <th>ลบข้อมูลแบบกลุ่ม</th>
+                <th>
+                    <p>ลบข้อมูลแบบกลุ่ม</p>
+                    <!-- <button class="btn btn-primary" onclick="checkAll()">เลือกทั้งหมด</button> -->
+                </th>
                 
             </tr>
         </thead>
@@ -55,33 +59,50 @@ $count = mysqli_num_rows($result); //msqli_num_row คือการนับ�
                 <td><?php echo $row[3]?></td>
                 <td><?php echo $row[4]?></td>
                 <td>
+                    <a href="editForm.php?id=<?php echo $row[0]?>" class="btn btn-warning">แก้ไข</a>
+                </td>
+                <td>
                     <a href="deleteQueryString.php?idemp=<?php echo $row[0] ?>" class="btn btn-danger" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่')">ลบ</a>
                 </td>
                 <form action="multipleDelete.php" method="POST">
-                    <td>
-                        <input type="checkbox" name="idcheck[]" class="form-control" value="<?php echo $row[0]; ?>"> <!-- ถ้าค่าที่ส่งเป็นอาร์เรย์ต้องใส่ [] ในชื่อด้วย -->
-                    </td>                 
-            </tr>
+                <td>               
+                    <input type="checkbox" name="idcheck[]" class="form-control" value="<?php echo $row[0]; ?>"> <!-- ถ้าค่าที่ส่งเป็นอาร์เรย์ต้องใส่ [] ในชื่อด้วย --> 
+                </td>
+
+            </tr>            
         <?php } ?>
         </tbody>
-
     </table>
     
 <?php }else{?>
     <hr>
     <div class="alert alert-danger">ไม่มีข้อมูลที่ต้องแสดง</div>
     <hr>
-<?php } ?>            
-    <a href="insertForm.php" class="btn btn-success">บันทึกข้อมูลพนักงาน</a>
-    <?php if($count> 0){ ?>
-    <input type="submit" value="DeleteCheck" class="btn btn-danger">
     <?php } ?>
-    </form>           
-    <a href="showdata_fecthrow.php" class="btn btn-primary">การใช้งาน Fetchrow</a>
-
-    <a href="http://127.0.0.1/phpmyadmin/" class="btn btn-info">Dbcon</a><br>
+    <a href="insertForm.php" class="btn btn-success">บันทึกข้อมูลพนักงาน</a>
+    <?php if($count>0){?>
+    <input type="submit" value="ลบข้อมูล (Checkbox)" class="btn btn-danger">
+    <?php } ?> 
+    </form>
+    <button class="btn btn-info" onclick="checkAll()">เลือกทั้งหมด</button>
+    <button class="btn btn-warning" onclick="uncheckAll()">ยกเลิก</button>
     
-
-</div>
+    </div>
 </body>
+
+
+<script>
+function checkAll(){
+    var form_element=document.forms[1].length; 
+    for(i=0;i<form_element-1;i++){
+        document.forms[1].elements[i].checked=true;
+    }
+}
+function uncheckAll(){
+    var form_element=document.forms[1].length; 
+    for(i=0;i<form_element-1;i++){
+        document.forms[1].elements[i].checked=false;
+    }
+}
+</script>
 </html>
